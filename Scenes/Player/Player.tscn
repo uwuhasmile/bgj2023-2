@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://cmp21o4ddcbhs"]
+
+[ext_resource type="Script" path="res://Scenes/Player/Player.gd" id="1_jl34p"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w4b8q"]
+size = Vector3(0.8, 1.84, 0.8)
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_jl34p")
+max_acceleration = 64.0
+max_decceleration = 32.0
+move_speed = 6.0
+jump_height = 2.0
+jump_peak_time = 0.5
+jump_fall_time = 0.4
+max_horizontal_air_speed = 8.0
+max_vertical_air_speed = 40.0
+air_control = 0.4
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, 0)
+shape = SubResource("BoxShape3D_w4b8q")
+
+[node name="CameraBone" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.136673, 1.62696, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraBone"]
+current = true
+fov = 90.0
