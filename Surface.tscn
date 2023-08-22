@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1bk2an81gttd"]
+
+[ext_resource type="PackedScene" uid="uid://dfqd3in8s3m4l" path="res://Resources/Models/Levels/surface.glb" id="1_bmqo8"]
+[ext_resource type="Material" uid="uid://gt42junageuk" path="res://Resources/Materials/Dev/DevFloorGray.tres" id="2_g67bf"]
+
+[node name="surface" instance=ExtResource("1_bmqo8")]
+
+[node name="surface_sector_003" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_g67bf")
+
+[node name="surface_sector_001" parent="." index="1"]
+surface_material_override/0 = ExtResource("2_g67bf")
+
+[node name="surface_sector_002" parent="." index="2"]
+surface_material_override/0 = ExtResource("2_g67bf")
+
+[node name="surface_sector_004" parent="." index="3"]
+surface_material_override/0 = ExtResource("2_g67bf")

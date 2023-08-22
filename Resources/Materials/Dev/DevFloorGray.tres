@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://gt42junageuk"]
+
+[ext_resource type="Texture2D" uid="uid://b8stkvb3la3ee" path="res://Resources/Materials/Dev/dev_floor_gray.png" id="1_qje6j"]
+
+[resource]
+albedo_texture = ExtResource("1_qje6j")
+uv1_scale = Vector3(0.512, 0.512, 0.512)
+uv1_triplanar = true
+texture_filter = 0

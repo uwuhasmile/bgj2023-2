@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Brackeys Game Jam 2023.2 Project"
+run/main_scene="res://Scenes/Levels/Level_Surface.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -31,7 +32,8 @@ enabled=PackedStringArray()
 
 input/mouse_sensitivity=0.12
 input/coyote_time=0.2
-input/jump_buffering=0.12
+input/jump_buffering=0.23
+input/gamepad_sensitivity=36.0
 
 [input]
 
@@ -87,6 +89,19 @@ gamepad_look_left={
 }
 mouse_sensitivity=0.0
 
-[physics]
+[layer_names]
 
-common/physics_interpolation=true
+3d_render/layer_1="Main"
+3d_render/layer_2="First Person"
+2d_physics/layer_1="Reverb"
+3d_physics/layer_1="Geometry"
+3d_physics/layer_2="Player"
+3d_physics/layer_3="Player Hitbox"
+3d_physics/layer_4="Trigger"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+textures/decals/filter=0
+textures/light_projectors/filter=0
+occlusion_culling/use_occlusion_culling=true

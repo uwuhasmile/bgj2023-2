@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cud5fhwtof1rp"]
+[gd_scene load_steps=6 format=3 uid="uid://cud5fhwtof1rp"]
 
 [ext_resource type="PackedScene" uid="uid://cmp21o4ddcbhs" path="res://Scenes/Player/Player.tscn" id="1_571if"]
 
@@ -12,13 +12,20 @@ sky_material = SubResource("ProceduralSkyMaterial_26bse")
 [sub_resource type="Environment" id="Environment_m343q"]
 background_mode = 2
 sky = SubResource("Sky_uj1cf")
-tonemap_mode = 2
+sky_custom_fov = 90.0
+tonemap_mode = 1
 ssao_enabled = true
 ssao_power = 0.630672
 ssil_enabled = true
 sdfgi_enabled = true
 sdfgi_use_occlusion = true
 glow_enabled = true
+glow_intensity = 3.47
+fog_enabled = true
+fog_light_energy = 0.16
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_psuuw"]
+size = Vector3(12.234, 6.95492, 10.5987)
 
 [node name="Level_Dev_CharacterTest01" type="Node3D"]
 
@@ -26,43 +33,64 @@ glow_enabled = true
 environment = SubResource("Environment_m343q")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+transform = Transform3D(-0.373103, 0.876161, -0.305182, -0.923639, -0.319684, 0.211408, 0.0876659, 0.360755, 0.928532, 0, 0, 0)
+layers = 3
+light_energy = 0.0
+light_cull_mask = 4293918723
 shadow_enabled = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.384007, -0.0193737, 0.131604)
 use_collision = true
+collision_mask = 0
 size = Vector3(34.3372, 1, 49.0333)
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.717647, 1.45262, 0.131604)
 use_collision = true
+collision_mask = 0
 size = Vector3(4.1276, 1.94399, 2.65995)
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.44888, 3.62474, 5.84022)
 use_collision = true
+collision_mask = 0
 size = Vector3(4.1276, 6.28823, 2.65995)
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.44888, 3.62474, -6.47078)
 use_collision = true
+collision_mask = 0
 size = Vector3(10.7283, 6.28823, 7.51403)
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.07595, 8.79951, -6.47078)
 use_collision = true
+collision_mask = 0
 size = Vector3(4.29342, 6.28823, 3.11538)
 
 [node name="CSGBox3D6" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.76428, 7.59257, -6.56152)
 use_collision = true
+collision_mask = 0
 size = Vector3(4.29342, 2.59809, 3.11538)
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.76428, 9.77998, -6.60035)
 use_collision = true
+collision_mask = 0
 size = Vector3(3.02416, 2.59809, 1.30393)
 
 [node name="Player" parent="." instance=ExtResource("1_571if")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.56078, 13.4491, -7.08008)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.56078, 12.0236, -7.08008)
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.0124, 0)
+collision_mask = 0
+reverb_bus_enabled = true
+reverb_bus_name = &"Reverb"
+reverb_bus_amount = 0.81
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.57858, -1.51158, 0)
+shape = SubResource("BoxShape3D_psuuw")

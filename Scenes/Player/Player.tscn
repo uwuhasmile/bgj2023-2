@@ -1,29 +1,367 @@
-[gd_scene load_steps=3 format=3 uid="uid://cmp21o4ddcbhs"]
+[gd_scene load_steps=40 format=3 uid="uid://cmp21o4ddcbhs"]
 
 [ext_resource type="Script" path="res://Scenes/Player/Player.gd" id="1_jl34p"]
+[ext_resource type="Script" path="res://Scenes/Player/PlayerCamera.gd" id="2_w5f4l"]
+[ext_resource type="AudioStream" uid="uid://4k0dh66f17an" path="res://Resources/Audio/Player/PlrFootstepJumping.tres" id="3_4ek82"]
+[ext_resource type="Script" path="res://Scenes/Player/PlayerAnimationTree.gd" id="3_aq2j8"]
+[ext_resource type="AudioStream" uid="uid://dvduaaugffbyq" path="res://Resources/Audio/Player/PlrFootstepRunning.tres" id="3_vsvs4"]
+[ext_resource type="AudioStream" uid="uid://bgmsj6j2dj1gq" path="res://Resources/Audio/Player/plr_speed_whoosh.ogg" id="4_1f7xo"]
+[ext_resource type="AudioStream" uid="uid://bry6e3i84fdr6" path="res://Resources/Audio/Player/PlrFootstepLanding.tres" id="4_ch7j8"]
+[ext_resource type="Script" path="res://Scenes/Player/PlayerWhooshAudioStreamPlayer.gd" id="5_f4k2t"]
+[ext_resource type="Script" path="res://Scenes/Common/AudioStreamPlayer3DPolyphonic.gd" id="8_v583x"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_w4b8q"]
-size = Vector3(0.8, 1.84, 0.8)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_77t2b"]
+
+[sub_resource type="Animation" id="Animation_cd6du"]
+resource_name = "RESET"
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraBone/Camera3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraBone/Camera3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+
+[sub_resource type="Animation" id="Animation_b2qxu"]
+resource_name = "falling"
+loop_mode = 1
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraBone/Camera3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0.044, -0.023, 1, 1, 0, 0.044, -0.023)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraBone/Camera3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.01, 0, 0, 1, 1, 1, 0.01, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_bp5en"]
+resource_name = "falling_fast"
+length = 0.075
+loop_mode = 1
+step = 0.025
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraBone/Camera3D")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -0.6, 0.6, -0.023, 0.025, 1, 0, -0.5, -0.023, 0.05, 1, 0.6, -0.6, -0.023, 0.075, 1, 0, 0.3, -0.023)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraBone/Camera3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.01, 0, 0, 1, 0.075, 1, 0.01, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_6nsbi"]
+resource_name = "idle"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraBone/Camera3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 3, 1, -0.0174524, 0, 0, 0.999848, 4, 1, 0, 0, 0, 1)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraBone/Camera3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(4, 1, 0, 0, 0)
+
+[sub_resource type="Animation" id="Animation_36q71"]
+resource_name = "jumping"
+length = 0.5
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraBone/Camera3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0.021, 0, 0.2, 1, 0, 0.044, -0.023, 0.5, 1, 0, 0.044, -0.023)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraBone/Camera3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0.0167282, 0, 0, 0.99986, 0.5, 1, 0.00958171, 0, 0, 0.999954)
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Footsteps")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [1, 0.0],
+"method": &"play_stream"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_pa0rd"]
+resource_name = "landing"
+length = 0.35
+step = 0.05
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraBone/Camera3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0.044, -0.023, 0.15, 1, 0, -0.16, -0.015, 0.35, 1, 0, 0, 0)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraBone/Camera3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.01, 0, 0, 1, 0.35, 1, 0, 0, 0, 1)
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Footsteps")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [2, 0.0],
+"method": &"play_stream"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_dww5a"]
+resource_name = "running"
+length = 0.6
+loop_mode = 1
+step = 0.05
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CameraBone/Camera3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -0.1, 0.021, 0, 0.15, 1, 0, -0.08, 0, 0.3, 1, 0.1, 0.021, 0, 0.45, 1, 0, -0.08, 0, 0.6, 1, -0.1, 0.021, 0)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CameraBone/Camera3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0.00349065, 0.999994, 0.3, 1, 0, 0, -0.00349065, 0.999994, 0.6, 1, 0, 0, 0.00349065, 0.999994)
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Footsteps")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.05, 0.35),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [0, 0.0],
+"method": &"play_stream"
+}, {
+"args": [0, 0.0],
+"method": &"play_stream"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cs5ep"]
+_data = {
+"RESET": SubResource("Animation_cd6du"),
+"falling": SubResource("Animation_b2qxu"),
+"falling_fast": SubResource("Animation_bp5en"),
+"idle": SubResource("Animation_6nsbi"),
+"jumping": SubResource("Animation_36q71"),
+"landing": SubResource("Animation_pa0rd"),
+"running": SubResource("Animation_dww5a")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qp48q"]
+animation = &"falling"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a5prj"]
+animation = &"falling_fast"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_0l1ir"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_qp48q")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_a5prj")
+blend_point_1/pos = 1.0
+min_space = 0.0
+snap = 1.0
+value_label = "speed"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xvti2"]
+animation = &"jumping"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cve1o"]
+animation = &"landing"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8hvgg"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qtmyc"]
+animation = &"running"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_jglfs"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_8hvgg")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_qtmyc")
+blend_point_1/pos = 1.0
+min_space = 0.0
+snap = 1.0
+value_label = "speed"
+blend_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yrxox"]
+advance_mode = 2
+advance_expression = "get_parent().is_on_floor()"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_i55a7"]
+advance_mode = 2
+advance_expression = "not get_parent().is_on_floor() and get_parent().jumped"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3ixlk"]
+xfade_time = 0.05
+reset = false
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_od4dj"]
+advance_mode = 2
+advance_expression = "get_parent().is_on_floor()"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0twlc"]
+advance_mode = 2
+advance_expression = "not get_parent().is_on_floor and get_parent().jumped"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0nf1f"]
+advance_mode = 2
+advance_expression = "not get_parent().is_on_floor() and get_parent().velocity.y < 0.0"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t02al"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gtw3i"]
+advance_mode = 2
+advance_expression = "get_parent().jumped"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_en83n"]
+advance_mode = 2
+advance_expression = "not get_parent().is_on_floor() and get_parent().velocity.y < 0.0"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_oek2q"]
+advance_mode = 2
+advance_expression = "get_parent().is_on_floor()"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cxxfh"]
+advance_mode = 2
+advance_expression = "not get_parent().is_on_floor()"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_wgup6"]
+states/Falling/node = SubResource("AnimationNodeBlendSpace1D_0l1ir")
+states/Falling/position = Vector2(602, -17)
+states/Jumping/node = SubResource("AnimationNodeAnimation_xvti2")
+states/Jumping/position = Vector2(403, -17)
+states/Landing/node = SubResource("AnimationNodeAnimation_cve1o")
+states/Landing/position = Vector2(602, 100)
+states/Movement/node = SubResource("AnimationNodeBlendSpace1D_jglfs")
+states/Movement/position = Vector2(363, 100)
+transitions = ["Start", "Movement", SubResource("AnimationNodeStateMachineTransition_yrxox"), "Movement", "Jumping", SubResource("AnimationNodeStateMachineTransition_i55a7"), "Landing", "Movement", SubResource("AnimationNodeStateMachineTransition_3ixlk"), "Jumping", "Landing", SubResource("AnimationNodeStateMachineTransition_od4dj"), "Landing", "Jumping", SubResource("AnimationNodeStateMachineTransition_0twlc"), "Landing", "Falling", SubResource("AnimationNodeStateMachineTransition_0nf1f"), "Jumping", "Falling", SubResource("AnimationNodeStateMachineTransition_t02al"), "Falling", "Jumping", SubResource("AnimationNodeStateMachineTransition_gtw3i"), "Movement", "Falling", SubResource("AnimationNodeStateMachineTransition_en83n"), "Falling", "Landing", SubResource("AnimationNodeStateMachineTransition_oek2q"), "Start", "Falling", SubResource("AnimationNodeStateMachineTransition_cxxfh")]
+graph_offset = Vector2(21, -89)
+
+[sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_76ujv"]
+polyphony = 6
 
 [node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 9
 script = ExtResource("1_jl34p")
 max_acceleration = 64.0
 max_decceleration = 32.0
-move_speed = 6.0
+move_speed = 8.0
 jump_height = 2.0
 jump_peak_time = 0.5
 jump_fall_time = 0.4
-max_horizontal_air_speed = 8.0
+max_horizontal_air_speed = 10.0
 max_vertical_air_speed = 40.0
 air_control = 0.4
+min_wall_jump_vertical_speed = -2.0
+max_wall_jumps = 1
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, 0)
-shape = SubResource("BoxShape3D_w4b8q")
+shape = SubResource("CapsuleShape3D_77t2b")
 
-[node name="CameraBone" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.136673, 1.62696, 0)
+[node name="CameraBone" type="Node3D" parent="." node_paths=PackedStringArray("parent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.627, 0)
+script = ExtResource("2_w5f4l")
+parent = NodePath("..")
 
 [node name="Camera3D" type="Camera3D" parent="CameraBone"]
+transform = Transform3D(1, 0, 0, 0, 0.999997, 0, 0, 0, 0.999997, 0, 0, 0)
 current = true
 fov = 90.0
+
+[node name="AudioListener3D" type="AudioListener3D" parent="CameraBone/Camera3D"]
+current = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "idle"
+libraries = {
+"": SubResource("AnimationLibrary_cs5ep")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="." node_paths=PackedStringArray("parent")]
+tree_root = SubResource("AnimationNodeStateMachine_wgup6")
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/Falling/blend_position = 0
+parameters/Movement/blend_position = 0.064722
+script = ExtResource("3_aq2j8")
+parent = NodePath("..")
+min_fall_speed = 20.0
+max_fall_speed = 37.0
+fall_speed_easing_curve = 3.0
+
+[node name="Whoosh" type="AudioStreamPlayer" parent="." node_paths=PackedStringArray("parent")]
+stream = ExtResource("4_1f7xo")
+bus = &"Sound"
+script = ExtResource("5_f4k2t")
+parent = NodePath("..")
+min_speed = 10.0
+max_speed = 20.0
+min_volume_db = -30.0
+easing_curve = -0.5
+
+[node name="Footsteps" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0506808, 0)
+stream = SubResource("AudioStreamPolyphonic_76ujv")
+max_distance = 2.5
+bus = &"Sound"
+script = ExtResource("8_v583x")
+streams = Array[AudioStream]([ExtResource("3_vsvs4"), ExtResource("3_4ek82"), ExtResource("4_ch7j8")])
