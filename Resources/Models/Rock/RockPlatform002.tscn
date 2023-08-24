@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://qja4v41lkq15"]
+
+[ext_resource type="PackedScene" uid="uid://dmfhn5u3sag33" path="res://Resources/Models/Rock/rock_platform_002.glb" id="1_qvnpc"]
+[ext_resource type="Material" uid="uid://bkdkoijau4vw7" path="res://Resources/Materials/Surface/SurfaceRock.tres" id="2_uc58i"]
+
+[node name="RockPlatform002" instance=ExtResource("1_qvnpc")]
+
+[node name="RockPlatform002" parent="." index="0"]
+material_override = ExtResource("2_uc58i")

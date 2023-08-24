@@ -1,9 +1,10 @@
-[gd_scene load_steps=40 format=3 uid="uid://cmp21o4ddcbhs"]
+[gd_scene load_steps=42 format=3 uid="uid://cmp21o4ddcbhs"]
 
 [ext_resource type="Script" path="res://Scenes/Player/Player.gd" id="1_jl34p"]
 [ext_resource type="Script" path="res://Scenes/Player/PlayerCamera.gd" id="2_w5f4l"]
 [ext_resource type="AudioStream" uid="uid://4k0dh66f17an" path="res://Resources/Audio/Player/PlrFootstepJumping.tres" id="3_4ek82"]
 [ext_resource type="Script" path="res://Scenes/Player/PlayerAnimationTree.gd" id="3_aq2j8"]
+[ext_resource type="Shader" path="res://Resources/Shaders/ColorVignette.gdshader" id="3_dda3y"]
 [ext_resource type="AudioStream" uid="uid://dvduaaugffbyq" path="res://Resources/Audio/Player/PlrFootstepRunning.tres" id="3_vsvs4"]
 [ext_resource type="AudioStream" uid="uid://bgmsj6j2dj1gq" path="res://Resources/Audio/Player/plr_speed_whoosh.ogg" id="4_1f7xo"]
 [ext_resource type="AudioStream" uid="uid://bry6e3i84fdr6" path="res://Resources/Audio/Player/PlrFootstepLanding.tres" id="4_ch7j8"]
@@ -11,6 +12,12 @@
 [ext_resource type="Script" path="res://Scenes/Common/AudioStreamPlayer3DPolyphonic.gd" id="8_v583x"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_77t2b"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ns44a"]
+shader = ExtResource("3_dda3y")
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/vignette_opacity = 0.5
+shader_parameter/vignette_rgb = Color(0.94902, 0.878431, 0, 1)
 
 [sub_resource type="Animation" id="Animation_cd6du"]
 resource_name = "RESET"
@@ -245,8 +252,6 @@ advance_mode = 2
 advance_expression = "not get_parent().is_on_floor() and get_parent().jumped"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3ixlk"]
-xfade_time = 0.05
-reset = false
 switch_mode = 2
 advance_mode = 2
 
@@ -260,7 +265,7 @@ advance_expression = "not get_parent().is_on_floor and get_parent().jumped"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0nf1f"]
 advance_mode = 2
-advance_expression = "not get_parent().is_on_floor() and get_parent().velocity.y < 0.0"
+advance_expression = "not get_parent().is_on_floor() and not get_parent().jumped"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t02al"]
 switch_mode = 2
@@ -272,7 +277,7 @@ advance_expression = "get_parent().jumped"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_en83n"]
 advance_mode = 2
-advance_expression = "not get_parent().is_on_floor() and get_parent().velocity.y < 0.0"
+advance_expression = "not get_parent().is_on_floor() and not get_parent().jumped"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_oek2q"]
 advance_mode = 2
@@ -292,7 +297,7 @@ states/Landing/position = Vector2(602, 100)
 states/Movement/node = SubResource("AnimationNodeBlendSpace1D_jglfs")
 states/Movement/position = Vector2(363, 100)
 transitions = ["Start", "Movement", SubResource("AnimationNodeStateMachineTransition_yrxox"), "Movement", "Jumping", SubResource("AnimationNodeStateMachineTransition_i55a7"), "Landing", "Movement", SubResource("AnimationNodeStateMachineTransition_3ixlk"), "Jumping", "Landing", SubResource("AnimationNodeStateMachineTransition_od4dj"), "Landing", "Jumping", SubResource("AnimationNodeStateMachineTransition_0twlc"), "Landing", "Falling", SubResource("AnimationNodeStateMachineTransition_0nf1f"), "Jumping", "Falling", SubResource("AnimationNodeStateMachineTransition_t02al"), "Falling", "Jumping", SubResource("AnimationNodeStateMachineTransition_gtw3i"), "Movement", "Falling", SubResource("AnimationNodeStateMachineTransition_en83n"), "Falling", "Landing", SubResource("AnimationNodeStateMachineTransition_oek2q"), "Start", "Falling", SubResource("AnimationNodeStateMachineTransition_cxxfh")]
-graph_offset = Vector2(21, -89)
+graph_offset = Vector2(-29, -53)
 
 [sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_76ujv"]
 polyphony = 6
@@ -330,6 +335,14 @@ fov = 90.0
 [node name="AudioListener3D" type="AudioListener3D" parent="CameraBone/Camera3D"]
 current = true
 
+[node name="VignetteBlink" type="ColorRect" parent="CameraBone/Camera3D"]
+material = SubResource("ShaderMaterial_ns44a")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "idle"
 libraries = {
@@ -346,7 +359,6 @@ script = ExtResource("3_aq2j8")
 parent = NodePath("..")
 min_fall_speed = 20.0
 max_fall_speed = 37.0
-fall_speed_easing_curve = 3.0
 
 [node name="Whoosh" type="AudioStreamPlayer" parent="." node_paths=PackedStringArray("parent")]
 stream = ExtResource("4_1f7xo")

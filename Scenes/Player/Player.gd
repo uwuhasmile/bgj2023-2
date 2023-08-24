@@ -2,6 +2,10 @@ extends CharacterBody3D
 class_name Player
 
 
+signal died(plr:Player)
+
+var _possessed: bool = true
+
 @export_category("Player: Movement")
 @export_range(0, 1000.0) var max_acceleration: float
 @export_range(0, 1000.0) var max_decceleration: float
@@ -20,7 +24,7 @@ var _wish_dir: Vector2
 var _wants_to_jump: bool
 var rotation_velocity: Vector3
 var control_rotation_velocity : Vector3
-var control_rotation: Vector3
+@export var control_rotation: Vector3
 
 """Jump variables"""
 var _jump_velocity: float
@@ -42,7 +46,11 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_calculate_input()
+	if (_possessed):
+		_calculate_input()
+	else:
+		_wish_dir = Vector2.ZERO
+		_wants_to_jump = false
 	_update_jump(delta)
 	control_rotation += rotation_velocity * delta
 	control_rotation.x = clampf(control_rotation.x, -PI * 0.5, PI * 0.5)
@@ -65,6 +73,7 @@ func _physics_process(delta: float) -> void:
 		var accelerator: float = max_acceleration if wish_dir.length_squared() > 0.0 else max_decceleration
 		var target: Vector3 = wish_dir * move_speed if wish_dir.length_squared() > 0.0 else Vector3.ZERO
 		velocity = velocity.move_toward(target, accelerator * delta)
+		velocity.y = 0.0
 	else:
 		if (velocity.y < 0.0 and _current_coyote_time == 0.0):
 			_current_coyote_time = _coyote_time
@@ -137,3 +146,17 @@ func _should_wall_jump() -> bool:
 	if (is_on_wall() and velocity.y > min_wall_jump_vertical_speed and _current_wall_jumps < max_wall_jumps):
 		return _wants_to_jump or _current_jump_buffer_time > 0.0
 	return false
+
+
+func die() -> void:
+	died.emit(self)
+
+
+func unpossess() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_possessed = false
+
+
+func possess() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	_possessed = true

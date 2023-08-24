@@ -1,9 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://dnuasihj1hbtr"]
-
-[ext_resource type="PackedScene" uid="uid://dgn10cyljmvk" path="res://Resources/Models/rock_pillar_001.glb" id="1_lleq8"]
-[ext_resource type="Material" uid="uid://bkdkoijau4vw7" path="res://Resources/Materials/Surface/SurfaceRock.tres" id="2_jxdat"]
-
-[node name="RockPillar002" instance=ExtResource("1_lleq8")]
-
-[node name="pillar_001" parent="." index="0"]
-material_override = ExtResource("2_jxdat")
