@@ -2,6 +2,7 @@ extends Area3D
 
 
 @export var checkpoint: Checkpoint
+@export var sound: AudioStream
 
 
 func _ready() -> void:
@@ -17,7 +18,7 @@ func _body_entered(body: Node) -> void:
 		player.post_processing.flash_vignette(0, Color(1.0, 1.0, 0.0), 0.6, 0.4)
 	if (is_instance_valid(player.hud)):
 		player.hud.flash_text("CHECKPOINT", 0.8)
-		
+	SoundManager.play(0, sound)
 
 
 func _exit_tree() -> void:

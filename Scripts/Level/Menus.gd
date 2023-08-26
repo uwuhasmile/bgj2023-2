@@ -8,6 +8,8 @@ signal game_finished()
 @export var main_menu_scene: PackedScene
 @export var finish_screen_scene: PackedScene
 
+@export var finish_sound: AudioStream
+
 var _main_menu: MainMenu
 var _finish_screen: FinishScreen
 
@@ -29,6 +31,7 @@ func show_finish_screen() -> void:
 	_finish_screen.restarted.connect(_game_restarted)
 	_finish_screen.finished.connect(_game_finished)
 	add_child(_finish_screen)
+	SoundManager.play(0, finish_sound)
 
 
 func hide_finish_screen() -> void:

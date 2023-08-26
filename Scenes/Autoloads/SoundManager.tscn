@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://ba0tyi4hejmua"]
+
+[ext_resource type="Script" path="res://Scenes/Autoloads/SoundManager.gd" id="1_kpccw"]
+
+[node name="SoundManager" type="Node"]
+script = ExtResource("1_kpccw")
+channels = Array[int]([1, 1])

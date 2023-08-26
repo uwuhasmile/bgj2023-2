@@ -16,6 +16,24 @@ script = ExtResource("1_fwpv3")
 time_label = NodePath("RecordTimeLabel")
 deaths_label = NodePath("RecordDeathsLabel")
 
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.371
+anchor_top = 0.4
+anchor_right = 0.629
+anchor_bottom = 0.489
+offset_left = 0.119965
+offset_top = -1.0
+offset_right = -0.119995
+offset_bottom = 2.91998
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 22
+text = "Game by ARFILISH
+For Brackeys Game Jam 2023.2"
+horizontal_alignment = 1
+
 [node name="Logo" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = -1
