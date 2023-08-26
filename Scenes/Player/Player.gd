@@ -4,7 +4,8 @@ class_name Player
 
 signal died(plr:Player)
 
-var _possessed: bool = true
+@export_category("Player: Input")
+@export var possessed: bool
 
 @export_category("Player: Movement")
 @export_range(0, 1000.0) var max_acceleration: float
@@ -18,6 +19,10 @@ var _possessed: bool = true
 @export_range(0.0, 1.0) var air_control: float
 @export_range(-1000.0, 1000.0) var min_wall_jump_vertical_speed: float
 @export_range(1, 10) var max_wall_jumps: int
+
+@export_category("Player: Children")
+@export var post_processing: PlayerPostProcessing
+@export var hud: HUD
 
 """Player input variables"""
 var _wish_dir: Vector2
@@ -39,14 +44,14 @@ var _current_coyote_time: float = NAN
 var _current_jump_buffer_time: float = 0.0
 var _current_wall_jumps: int = 0
 
-
 func _ready() -> void:
-	control_rotation = Vector3(0.0, global_rotation.y, 0.0)
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if (possessed):
+		control_rotation = Vector3(0.0, global_rotation.y, 0.0)
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 func _process(delta: float) -> void:
-	if (_possessed):
+	if (possessed):
 		_calculate_input()
 	else:
 		_wish_dir = Vector2.ZERO
@@ -149,14 +154,18 @@ func _should_wall_jump() -> bool:
 
 
 func die() -> void:
+	if (is_instance_valid(Game.current_session)):
+		Game.current_session.add_death()
+	if (is_instance_valid(post_processing)):
+		post_processing.flash_vignette(0, Color(1.0, 0.0, 0.0), 0.6, 0.3)
 	died.emit(self)
 
 
 func unpossess() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	_possessed = false
+	possessed = false
 
 
 func possess() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	_possessed = true
+	possessed = true

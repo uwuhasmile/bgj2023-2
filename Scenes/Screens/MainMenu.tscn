@@ -1,0 +1,107 @@
+[gd_scene load_steps=4 format=3 uid="uid://b08d0wkjxcra5"]
+
+[ext_resource type="Script" path="res://Scenes/Screens/MainMenu.gd" id="1_fwpv3"]
+[ext_resource type="Theme" uid="uid://4ugw5y144ne" path="res://Resources/Themes/UITheme.tres" id="1_rtajs"]
+[ext_resource type="Texture2D" uid="uid://6ahsv6dhg5c7" path="res://Resources/logo_big.png" id="2_8lfkw"]
+
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("time_label", "deaths_label")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_rtajs")
+script = ExtResource("1_fwpv3")
+time_label = NodePath("RecordTimeLabel")
+deaths_label = NodePath("RecordDeathsLabel")
+
+[node name="Logo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.106
+anchor_top = 0.089
+anchor_right = 0.875
+anchor_bottom = 0.422
+offset_left = 0.319992
+offset_top = -0.0800018
+offset_right = 8.99988
+offset_bottom = 0.159973
+grow_horizontal = 2
+texture = ExtResource("2_8lfkw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.262
+anchor_top = 0.556
+anchor_right = 0.75
+anchor_bottom = 0.708
+offset_left = -15.36
+offset_top = -0.320038
+offset_right = -6.10352e-05
+offset_bottom = 0.23999
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../QuitButton")
+focus_neighbor_bottom = NodePath("../QuitButton")
+text = "Start"
+
+[node name="QuitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../StartButton")
+focus_neighbor_bottom = NodePath("../StartButton")
+text = "Quit"
+
+[node name="RecordTimeLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.767
+anchor_right = 0.651
+anchor_bottom = 0.803
+offset_left = -3.05176e-05
+offset_top = 55.76
+offset_right = -0.280029
+offset_bottom = 60.84
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 20
+text = "Record time: "
+horizontal_alignment = 1
+
+[node name="RecordDeathsLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.8
+anchor_right = 0.651
+anchor_bottom = 0.843
+offset_left = -3.05176e-05
+offset_top = 61.0
+offset_right = -0.280029
+offset_bottom = 61.04
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.741176, 0.690196, 1)
+theme_override_font_sizes/font_size = 20
+text = "Record deaths: "
+horizontal_alignment = 1
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.141176, 0.223529, 0.219608, 0.45098)
+
+[connection signal="ready" from="." to="VBoxContainer/StartButton" method="grab_focus"]
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="start"]
+[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="exit"]

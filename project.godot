@@ -10,10 +10,15 @@ config_version=5
 
 [application]
 
-config/name="Brackeys Game Jam 2023.2 Project"
+config/name="LONG JUMP CLIFFS"
 run/main_scene="res://Scenes/Levels/Level_Surface.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Game="*res://Scripts/Autoloads/Game.gd"
+GameSave="*res://Scripts/Autoloads/GameSave.gd"
 
 [display]
 

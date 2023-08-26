@@ -1,0 +1,142 @@
+[gd_scene load_steps=5 format=3 uid="uid://4vt1uwav5mup"]
+
+[ext_resource type="Theme" uid="uid://4ugw5y144ne" path="res://Resources/Themes/UITheme.tres" id="1_a0hs6"]
+[ext_resource type="Script" path="res://Scenes/Screens/FinishScreen.gd" id="2_vhgh8"]
+
+[sub_resource type="Animation" id="Animation_5sm3v"]
+resource_name = "start"
+length = 0.2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Controls:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(0, 0), Vector2(-8, -8), Vector2(8, 8), Vector2(0, 0), Vector2(-8, -8), Vector2(8, 8), Vector2(0, 0), Vector2(-8, -8), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kjud0"]
+_data = {
+"start": SubResource("Animation_5sm3v")
+}
+
+[node name="FinishScreen" type="Control" node_paths=PackedStringArray("time_label", "deaths_label", "new_record_label")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_a0hs6")
+script = ExtResource("2_vhgh8")
+time_label = NodePath("Controls/TimeLabel")
+deaths_label = NodePath("Controls/DeathsLabel")
+new_record_label = NodePath("Controls/NewRecordLabel")
+
+[node name="Controls" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.262
+anchor_top = 0.556
+anchor_right = 0.75
+anchor_bottom = 0.708
+offset_left = -15.36
+offset_top = -0.320038
+offset_right = -6.10352e-05
+offset_bottom = 0.23999
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RestartButton" type="Button" parent="Controls/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../FinishButton")
+focus_neighbor_bottom = NodePath("../FinishButton")
+text = "Try again"
+
+[node name="FinishButton" type="Button" parent="Controls/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../RestartButton")
+focus_neighbor_bottom = NodePath("../RestartButton")
+text = "Return to menu"
+
+[node name="TimeLabel" type="Label" parent="Controls"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.233
+anchor_right = 0.95
+anchor_bottom = 0.331
+offset_top = 0.23999
+offset_bottom = -0.320023
+grow_horizontal = 2
+grow_vertical = 0
+text = "Time: "
+horizontal_alignment = 1
+
+[node name="DeathsLabel" type="Label" parent="Controls"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.333
+anchor_right = 0.95
+anchor_bottom = 0.431
+offset_top = 0.23999
+offset_bottom = -0.320007
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.741176, 0.690196, 1)
+text = "Deaths:"
+horizontal_alignment = 1
+
+[node name="NewRecordLabel" type="Label" parent="Controls"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.437
+anchor_top = 0.456
+anchor_right = 0.559
+anchor_bottom = 0.507
+offset_left = 0.640015
+offset_top = -0.320007
+offset_right = 0.47998
+offset_bottom = -0.0400085
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "NEW RECORD"
+horizontal_alignment = 1
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.701961, 1, 0.941176, 1)
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_kjud0")
+}
+
+[connection signal="ready" from="." to="Controls/VBoxContainer/RestartButton" method="grab_focus"]
+[connection signal="ready" from="." to="AnimationPlayer" method="play" binds= [&"start"]]
+[connection signal="pressed" from="Controls/VBoxContainer/RestartButton" to="." method="_restarted"]
+[connection signal="pressed" from="Controls/VBoxContainer/FinishButton" to="." method="_finished"]

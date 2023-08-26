@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://ter4rv8o43v8"]
+[gd_scene load_steps=61 format=3 uid="uid://ter4rv8o43v8"]
 
 [ext_resource type="PackedScene" uid="uid://dv8nb7yu0bkvi" path="res://Resources/Models/Rock/RockPlatform001.tscn" id="1_lo385"]
 [ext_resource type="PackedScene" uid="uid://cmp21o4ddcbhs" path="res://Scenes/Player/Player.tscn" id="2_frrvk"]
@@ -7,6 +7,15 @@
 [ext_resource type="PackedScene" uid="uid://dbv1w28qi6qla" path="res://Resources/Models/Rock/RockPillar002.tscn" id="3_tkwk4"]
 [ext_resource type="LightmapGIData" uid="uid://bstvckw0eu0bp" path="res://Scenes/Levels/Level_001.lmbake" id="4_jf308"]
 [ext_resource type="PackedScene" uid="uid://bd7edroxujr0n" path="res://Resources/Models/Rock/RockWall003.tscn" id="5_w28s0"]
+[ext_resource type="Script" path="res://Scenes/Triggers/KillTrigger.gd" id="7_jvvvg"]
+[ext_resource type="Script" path="res://Scripts/Game/CheckpointManager.gd" id="7_mv6cv"]
+[ext_resource type="Script" path="res://Scripts/Game/Checkpoint.gd" id="8_6xa4w"]
+[ext_resource type="Script" path="res://Scenes/Triggers/CheckpointTrigger.gd" id="10_sbhm6"]
+[ext_resource type="Script" path="res://Scenes/Triggers/PlayerTrigger.gd" id="11_6topq"]
+[ext_resource type="Script" path="res://Scripts/Level/Menus.gd" id="12_2cr5y"]
+[ext_resource type="PackedScene" uid="uid://b08d0wkjxcra5" path="res://Scenes/Screens/MainMenu.tscn" id="13_pycdh"]
+[ext_resource type="PackedScene" uid="uid://4vt1uwav5mup" path="res://Scenes/Screens/FinishScreen.tscn" id="14_baenc"]
+[ext_resource type="Script" path="res://Scripts/Game/LocalGame.gd" id="15_t1os0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ppxky"]
 sky_top_color = Color(0.631373, 0.666667, 1, 1)
@@ -131,13 +140,272 @@ emission_energy_multiplier = 2.94
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_8bo0i"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_pttqi"]
+size = Vector3(47.8692, 11.2692, 76.9527)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5lodn"]
+size = Vector3(47.8692, 11.2692, 53.4625)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iwhfm"]
+size = Vector3(66.8291, 14.2858, 53.4625)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kyo1f"]
+size = Vector3(18.5262, 16.8034, 3.98946)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g72ha"]
+size = Vector3(18.4982, 9.43466, 10.9613)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8j6mo"]
+size = Vector3(11.5261, 11.2583, 1)
+
+[sub_resource type="Animation" id="Animation_wu1nk"]
+resource_name = "main_menu"
+length = 0.2
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Triggers/StartPosition")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [NodePath("../../Player")],
+"method": &"teleport_object_here"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"unpossess"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Menus")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"show_main_menu"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Hints:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Menus")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hide_finish_screen"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_vkc3l"]
+resource_name = "gameplay"
+length = 0.1
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Game")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Hints:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Player")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"possess"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Menus")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hide_main_menu"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Menus")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hide_finish_screen"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Triggers/StartPosition")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [NodePath("../../Player")],
+"method": &"teleport_object_here"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Triggers/StartPosition")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"set_current"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_awniy"]
+resource_name = "finish"
+length = 0.1
+step = 0.01
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"unpossess"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Menus")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.04),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"show_finish_screen"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Triggers/StartPosition")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [NodePath("../../Player")],
+"method": &"teleport_object_here"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Game")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"end"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x731t"]
+_data = {
+"finish": SubResource("Animation_awniy"),
+"gameplay": SubResource("Animation_vkc3l"),
+"main_menu": SubResource("Animation_wu1nk")
+}
+
 [node name="Level_001" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_wv32l")
 
 [node name="Player" parent="." instance=ExtResource("2_frrvk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.61836, 1.20594, -5.99467)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2655, -47.4381, 225.678)
+possessed = true
 control_rotation = Vector3(0, 3.14, 0)
 
 [node name="Geometry" type="StaticBody3D" parent="."]
@@ -307,6 +575,9 @@ transform = Transform3D(2.33106, 4.79262, 0.119961, -0.399854, -0.371221, 1.0000
 
 [node name="RockPillar016" parent="Geometry" instance=ExtResource("3_ciqjf")]
 transform = Transform3D(0.0430635, 0.982302, 4.47221, -3.43348, -0.0386048, 0.192834, 0.136816, -1.278, 3.43163, 3.50544, -70.4603, 216.391)
+
+[node name="RockPillar024" parent="Geometry" instance=ExtResource("3_ciqjf")]
+transform = Transform3D(0.0430635, 0.982302, 7.49657, -3.43348, -0.0386048, 0.323239, 0.136816, -1.278, 5.75229, -5.29572, -69.2341, 227.792)
 
 [node name="RockPillar017" parent="Geometry" instance=ExtResource("3_ciqjf")]
 transform = Transform3D(-1.41511, 1.45215, -1.1765, 0.646222, -0.10496, -8.30417, -3.06419, -0.69277, -1.20798, -6.07317, -70.0838, 228.853)
@@ -672,6 +943,105 @@ transform = Transform3D(7.66434, -0.436414, -0.0176139, 0, -0.0061717, 7.9357, -
 material_override = SubResource("StandardMaterial3D_fanvg")
 mesh = SubResource("PlaneMesh_8bo0i")
 
+[node name="Triggers" type="Node3D" parent="."]
+
+[node name="KillTrigger" type="Area3D" parent="Triggers"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_jvvvg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/KillTrigger"]
+transform = Transform3D(1, 0, 0, 0, 0.999813, -0.0193545, 0, 0.0193545, 0.999813, 0, -34.8644, 37.1741)
+shape = SubResource("BoxShape3D_pttqi")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Triggers/KillTrigger"]
+transform = Transform3D(0.996886, 0.00815954, 0.078436, 0, 0.994633, -0.10347, -0.0788593, 0.103147, 0.991535, 0, -39.9025, 109.423)
+shape = SubResource("BoxShape3D_pttqi")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Triggers/KillTrigger"]
+transform = Transform3D(0.98615, -0.0171611, -0.164966, -0.0307059, 0.958548, -0.283272, 0.162989, 0.284414, 0.944745, -7.97815, -57.3714, 164.05)
+shape = SubResource("BoxShape3D_5lodn")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Triggers/KillTrigger"]
+transform = Transform3D(0.998768, -0.0463066, -0.0178231, 0.0460178, 0.998808, -0.016293, 0.0185565, 0.0154528, 0.999708, -19.8323, -68.3761, 215.838)
+shape = SubResource("BoxShape3D_iwhfm")
+
+[node name="CheckpointManager" type="Node" parent="Triggers" node_paths=PackedStringArray("current")]
+script = ExtResource("7_mv6cv")
+current = NodePath("../StartPosition")
+
+[node name="StartPosition" type="Marker3D" parent="Triggers" node_paths=PackedStringArray("manager")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1.12593, -5.32348)
+gizmo_extents = 4.9
+script = ExtResource("8_6xa4w")
+manager = NodePath("../CheckpointManager")
+
+[node name="Checkpoint001" type="Area3D" parent="Triggers" node_paths=PackedStringArray("checkpoint")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.9383)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("10_sbhm6")
+checkpoint = NodePath("Position")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoint001"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.64446, 1.00359)
+shape = SubResource("BoxShape3D_kyo1f")
+
+[node name="Position" type="Marker3D" parent="Triggers/Checkpoint001" node_paths=PackedStringArray("manager")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1.12593, 0.173595)
+gizmo_extents = 4.9
+script = ExtResource("8_6xa4w")
+manager = NodePath("../../CheckpointManager")
+
+[node name="Checkpoint002" type="Area3D" parent="Triggers" node_paths=PackedStringArray("checkpoint")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.256378, 61.2244)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("10_sbhm6")
+checkpoint = NodePath("Position")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoint002"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.12232, -0.353661)
+shape = SubResource("BoxShape3D_g72ha")
+
+[node name="Position" type="Marker3D" parent="Triggers/Checkpoint002" node_paths=PackedStringArray("manager")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1.12593, 0.173595)
+gizmo_extents = 4.9
+script = ExtResource("8_6xa4w")
+manager = NodePath("../../CheckpointManager")
+
+[node name="Checkpoint003" type="Area3D" parent="Triggers" node_paths=PackedStringArray("checkpoint")]
+transform = Transform3D(0.430762, -0.0514104, 0.901, 0.0923029, 0.99565, 0.0126817, -0.897733, 0.0777021, 0.433634, -13.5739, -48.3257, 199.126)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("10_sbhm6")
+checkpoint = NodePath("Position")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/Checkpoint003"]
+transform = Transform3D(0.993421, 0.114521, -5.96046e-08, -0.114521, 0.993421, 3.72529e-09, 0, 0, 1, 0, 1.83933, -0.353661)
+shape = SubResource("BoxShape3D_g72ha")
+
+[node name="Position" type="Marker3D" parent="Triggers/Checkpoint003" node_paths=PackedStringArray("manager")]
+transform = Transform3D(0.974781, 5.96046e-08, 0.223165, -3.72529e-08, 0.999999, 3.1665e-08, -0.223165, -3.35276e-08, 0.97478, -0.587753, -6.58709, 0.073616)
+gizmo_extents = 4.9
+script = ExtResource("8_6xa4w")
+manager = NodePath("../../CheckpointManager")
+
+[node name="FinishTrigger" type="Area3D" parent="Triggers"]
+transform = Transform3D(0.996144, -0.0877295, 0, 0.0877295, 0.996144, 0, 0, 0, 1, -14.1582, -45.4394, 229.841)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_6topq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Triggers/FinishTrigger"]
+transform = Transform3D(0.972407, 0, 0.233293, 0, 1, 0, -0.233293, 0, 0.972407, 0, -2.10088, 3.59439)
+shape = SubResource("BoxShape3D_8j6mo")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0)
 light_energy = 4.383
@@ -683,7 +1053,10 @@ quality = 3
 directional = true
 light_data = ExtResource("4_jf308")
 
-[node name="Label3D" type="Label3D" parent="."]
+[node name="Hints" type="Node3D" parent="."]
+visible = false
+
+[node name="Label3D" type="Label3D" parent="Hints"]
 transform = Transform3D(-1, 0, -8.74228e-08, -8.74228e-08, -4.37114e-08, 1, -3.82137e-15, 1, 4.37114e-08, 0, 1.19209, 0.264453)
 double_sided = false
 text = "WASD or Left Stick
@@ -691,7 +1064,7 @@ to Move"
 font_size = 128
 outline_size = 56
 
-[node name="Label3D2" type="Label3D" parent="."]
+[node name="Label3D2" type="Label3D" parent="Hints"]
 transform = Transform3D(-1, 0, -8.74228e-08, -8.74228e-08, -4.37114e-08, 1, -3.82137e-15, 1, 4.37114e-08, 0, 1.19209, -1.81915)
 double_sided = false
 text = "Mouse or Right Stick
@@ -699,7 +1072,7 @@ to Look"
 font_size = 128
 outline_size = 56
 
-[node name="Label3D3" type="Label3D" parent="."]
+[node name="Label3D3" type="Label3D" parent="Hints"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 9.41857e-07, 3.38574, 10.7736)
 double_sided = false
 text = "Space or A
@@ -707,10 +1080,30 @@ to Jump"
 font_size = 128
 outline_size = 56
 
-[node name="Label3D4" type="Label3D" parent="."]
+[node name="Label3D4" type="Label3D" parent="Hints"]
 transform = Transform3D(-0.0564661, 0, -0.998405, 0, 1, 0, 0.998405, 0, -0.0564661, 7.0025, 3.12934, 46.4153)
 double_sided = false
 text = "You can jump
 off walls"
 font_size = 256
 outline_size = 56
+
+[node name="Menus" type="CanvasLayer" parent="."]
+script = ExtResource("12_2cr5y")
+main_menu_scene = ExtResource("13_pycdh")
+finish_screen_scene = ExtResource("14_baenc")
+
+[node name="Game" type="Node" parent="."]
+script = ExtResource("15_t1os0")
+
+[node name="States" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_x731t")
+}
+
+[connection signal="ready" from="." to="States" method="play" binds= [&"main_menu"]]
+[connection signal="died" from="Player" to="Triggers/CheckpointManager" method="revive"]
+[connection signal="player_entered" from="Triggers/FinishTrigger" to="States" method="play" binds= [&"finish"]]
+[connection signal="game_finished" from="Menus" to="States" method="play" binds= [&"main_menu"]]
+[connection signal="game_restarted" from="Menus" to="States" method="play" binds= [&"gameplay"]]
+[connection signal="game_started" from="Menus" to="States" method="play" binds= [&"gameplay"]]
